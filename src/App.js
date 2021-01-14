@@ -1,0 +1,85 @@
+import { NavigateNextTwoTone } from '@material-ui/icons';
+import React, { useState } from 'react';
+import './App.css';
+//https://www.youtube.com/watch?v=02ieJ1YXZM4 19:10
+
+const PAGE_PRODUCTS = 'products';
+const PAGE_CART = 'cart';
+
+function App() {
+  const [cart, setCart] = useState([]);
+  const [page, setPage] = useState('products');
+
+
+  const [products] = useState([
+    {
+      name: 'AA Battery',
+      cost: '2.99',
+      image: 'data:image/jpeg;base64,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',
+
+    },
+    {
+      name: 'AA Battery',
+      cost: '2.99',
+      image: 'data:image/jpeg;base64,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',
+
+    },
+  ])
+  const addToCart = (product) => {
+    setCart([...cart, { ...product }]);
+  };
+  const removeFromCart = (productToRemove) => {
+    setCart(
+      cart.filter((product) => product !== productToRemove)
+    );
+
+  }
+  const navigateTo = (nextPage) => {
+    setPage(nextPage);
+  };
+
+  const renderProducts = () => (
+    <>
+    <h1>Products</h1>
+    <div className="products">
+    {products.map((product, idx) => (
+      <div className="product" key={idx}>
+      <h3>{product.name}</h3>
+      <h4>{product.cost}</h4>
+      <img src={product.image} alt={product.name} />
+      <button onClick={() => addToCart(product)}>Add to Cart</button>
+    </div>
+    ))}
+    </div>
+    </>
+  );
+  const renderCart = () => (
+    <>
+    <h1>Cart</h1>
+    <div className="products">
+    {cart.map((product, idx) => (
+      <div className="product" key={idx}>
+      <h3>{product.name}</h3>
+      <h4>{product.cost}</h4>
+      <img src={product.image} alt={product.name} />
+      <button onClick={() => removeFromCart(product)}>Remove</button>
+    </div>
+    ))}
+    </div>
+    </>
+  )
+  return (
+    <div className="App">
+    <header>
+      <button onClick={() => navigateTo(PAGE_CART)}>Go To Cart ({cart.length})</button>
+    </header>
+    <header>
+      <button onClick={() => navigateTo(PAGE_PRODUCTS)}>View Products</button>
+    </header>
+    {page === PAGE_PRODUCTS && renderProducts()}
+    {page === PAGE_CART && renderCart()}
+    </div>
+  );
+}
+
+export default App;
